@@ -1,15 +1,19 @@
 import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Retry } from '../app.component';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class InterseptorOneService implements HttpInterceptor{
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log(req.context.get(Retry))
     const newreq=req.clone({
       headers:new HttpHeaders({Authorization:'TOken'})
     })
+    
     return next.handle(newreq)
   }
   constructor() { }
