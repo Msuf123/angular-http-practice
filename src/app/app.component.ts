@@ -1,19 +1,10 @@
 import { HttpClient, HttpClientModule, HttpContext, HttpContextToken, HttpErrorResponse, HttpEventType } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-import { Observable, catchError, tap } from 'rxjs';
+import { Observable, Subject, catchError, debounceTime, delay, distinctUntilChanged, switchMap, tap } from 'rxjs';
+import { HttpService } from './services/http.service';
 export const Retry=new HttpContextToken(()=>4)
-function errorHandler(e:HttpErrorResponse){
-  if(e.status===0){
-    console.log('On our side')
-  }
-  else{
-    
-    console.log('Error on our side',e)
-  }
-  return new Observable((e)=>e.next('Error'))
-}
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -22,39 +13,35 @@ function errorHandler(e:HttpErrorResponse){
   styleUrl: './app.component.css',
   providers:[]
 })
-export class AppComponent {
+export class AppComponent implements OnInit,DoCheck{
   title = 'http-practice';
+  private searchText$=new Subject<string>()
+  result$!:Observable<any>
   fomrGroup=new FormGroup({
-    file:new FormControl('')
+    
   })
   submitForm(){
-    console.log(this.fomrGroup.value)
+    
   }
-  constructor(private req:HttpClient){
- req.get('http://localhost:3333/api',{params:{name:'akshat'},observe:'events',reportProgress:true,responseType:'text',context:new HttpContext().set(Retry,5)}).pipe(tap((a)=>{
-  if(a.type===HttpEventType.Sent){
-    console.log(a,'Reqest is sendt to the server')
+  loggerKey(event:any){
+    
+    this.searchText$.next(event.target.value as string)
   }
-  if(a.type===HttpEventType.ResponseHeader){
-    console.log(a,'Reviced respisne form server')
+  constructor(private req:HttpService){ }
+  ngOnInit(): void {
+    
+    
+        this.searchText$.pipe(
+          debounceTime(1000),
+          distinctUntilChanged(),
+          switchMap((a) =>this.req.fetch(a)))
+          .subscribe(term => { 
+           console.log(term);
+         });
   }
-  if(a.type===HttpEventType.Response){
-      console.log(a,'Full Response form server')
-  }
-  if(a.type===HttpEventType.DownloadProgress){
-    console.log(a,'Whats the pregfess fo server')
-  }
-  if(a.type===HttpEventType.UploadProgress){
-    console.log(a,'Uplading progress')
-  }
- 
- 
- })
-).subscribe((a)=>{
-  
-}
-  
-)
+  ngDoCheck(): void {
+    
+    
   }
 }
  

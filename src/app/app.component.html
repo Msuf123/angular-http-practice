@@ -1,5 +1,5 @@
 <form [formGroup]="fomrGroup" (ngSubmit)="submitForm()">
     <p>Uplad file</p>
-    <input formControlName="file" type="file" accept="text/plain" >
+    <input  type="text" (keydown)="loggerKey($event)" accept="text/plain" >
     <button>Uplaod</button>
 </form>
