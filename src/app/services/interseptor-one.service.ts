@@ -11,7 +11,7 @@ export class InterseptorOneService implements HttpInterceptor{
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     
     const newreq=req.clone({
-      headers:new HttpHeaders({Authorization:'TOken'})
+      headers:new HttpHeaders({'Autho':'kk'})
     })
     
     return next.handle(newreq)
@@ -19,4 +19,4 @@ export class InterseptorOneService implements HttpInterceptor{
   constructor() { }
   
 }
-export const providers:Provider[]=[{provide:HTTP_INTERCEPTORS,useClass:InterseptorOneService,multi:true}]
+export const providers:Provider[]=[{provide:HTTP_INTERCEPTORS,useClass:InterseptorOneService,multi:true},]

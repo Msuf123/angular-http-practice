@@ -9,6 +9,6 @@ export class HttpService {
   constructor(private request:HttpClient) { }
   fetch(name:string){
     console.log(name)
-    return this.request.get('https://dummyjson.com/products/1',{observe:'body',responseType:'json'})
+    return this.request.post('http://localhost:3333/api','kk',{observe:'body',responseType:'text',headers:{'Content-Type':'application/x-www-form-urlencoded'}})
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule, HttpContext, HttpContextToken, HttpErrorResponse, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpClientXsrfModule, HttpContext, HttpContextToken, HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
@@ -8,7 +8,7 @@ export const Retry=new HttpContextToken(()=>4)
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,HttpClientModule,ReactiveFormsModule],
+  imports: [RouterOutlet,HttpClientModule,ReactiveFormsModule,HttpClientXsrfModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   providers:[]
@@ -24,10 +24,15 @@ export class AppComponent implements OnInit,DoCheck{
     
   }
   loggerKey(event:any){
-    
-    this.searchText$.next(event.target.value as string)
+    console.log(event.key as string)
+    if(event.key!='Backspace'){
+
+    }
+    this.searchText$.next(event.target.value+event.key as string)
   }
-  constructor(private req:HttpService){ }
+  constructor(private req:HttpService,private request:HttpClient){
+    this.request.get('http://localhost:3333/apii',{observe:'response',responseType:'text',withCredentials:true}).subscribe((a)=>console.log(a.headers.get('Connection')))
+   }
   ngOnInit(): void {
     
     
