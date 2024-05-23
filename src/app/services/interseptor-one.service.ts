@@ -11,7 +11,7 @@ export class InterseptorOneService implements HttpInterceptor{
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     
     const newreq=req.clone({
-      headers:new HttpHeaders({'Autho':'kk'})
+      headers:new HttpHeaders({'Xcresf':'kk'})
     })
     
     return next.handle(newreq)

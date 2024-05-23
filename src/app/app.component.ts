@@ -8,7 +8,7 @@ export const Retry=new HttpContextToken(()=>4)
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,HttpClientModule,ReactiveFormsModule,HttpClientXsrfModule],
+  imports: [RouterOutlet,HttpClientModule,ReactiveFormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
   providers:[]
@@ -31,7 +31,8 @@ export class AppComponent implements OnInit,DoCheck{
     this.searchText$.next(event.target.value+event.key as string)
   }
   constructor(private req:HttpService,private request:HttpClient){
-    this.request.get('http://localhost:3333/apii',{observe:'response',responseType:'text',withCredentials:true}).subscribe((a)=>console.log(a.headers.get('Connection')))
+    console.log(document.cookie)
+    this.request.post('http://localhost:3333/apii','ll',{observe:'response',responseType:'text',withCredentials:true}).subscribe((a)=>console.log(a.headers.get('Connection')))
    }
   ngOnInit(): void {
     

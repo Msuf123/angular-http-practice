@@ -5,5 +5,10 @@ import { routes } from './app.routes';
 import { HttpClient, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes),importProvidersFrom(HttpClientModule),importProvidersFrom(HttpClientXsrfModule)]
+  providers: [provideRouter(routes),importProvidersFrom(HttpClientModule), importProvidersFrom(
+    HttpClientXsrfModule.withOptions({
+    cookieName: 'XSRF-TOKEN',
+    headerName: 'X-XSRF-TOKEN',
+  })
+),providers]
 };
